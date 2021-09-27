@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+  db:
+    image: mdillon/postgis #User original postgres image
+    container_name: short_notes_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_volume_v1:/var/lib/postgresql/data
+    env_file:
+      - ./config/dev.env
+    networks: 
+      - db_network
+
+  pgadmin:
+    image: dpage/pgadmin4:4.28
+    container_name: short_notes_db_admin
+    links:
+      - db
+    depends_on:
+      - db
+    environment:
+      PGADMIN_DEFAULT_EMAIL: hi.rahulpalve@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: th!s1s
+    ports:
+      - "80:80"
+    networks: 
+      - db_network
+
+
+networks:
+  db_network:
+    driver: bridge
+
+volumes:
+  db_volume_v1:
+  static:
